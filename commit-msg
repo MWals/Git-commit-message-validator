@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# date: 2020-10-19
+# author: Markus Wals, es19m012
+
+# TODO: Validate commit messages on all branches with a simple regex
+# to enforce that commit messages start with PJM- followed by a 4 digit
+# number.
+#
+# How does this regex work?
+# ^		Beginning of the string (line anchor)
+# PJM- 		The Letters PJM followed by a - symbol
+# [0-9]{4}	Issue ID, 4 Digits that can be numbers from 0 - 9
+# \b		Word boundry
+#
+# Examples for good commit messages:
+# PJM-0001 Anytext
+# PJM-9999 Some other text
+
+commit_msg_pattern='^PJM-[0-9]{4}\b'
+error_msg="Your commit message does not match the specified pattern: PJM-<4 Digit Issue ID> <Commit Message>"
+
+if ! grep -iqE "$commit_msg_pattern" "$1"; then
+	echo "$error_msg" >&2
+	exit 1
+fi
